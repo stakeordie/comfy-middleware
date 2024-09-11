@@ -135,6 +135,7 @@ def handle_post():
             image_base64 = base64.b64encode(image_bytes).decode('utf-8')
 
     response = {
+        'status': 'COMPLETED',
         'output': {
             'message': image_base64
         }
