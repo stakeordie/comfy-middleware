@@ -135,7 +135,7 @@ def handle_post():
             image_base64 = base64.b64encode(image_bytes).decode('utf-8')
 
     response = {
-        'image': image_base64
+        'data': image_base64
     }
     
     return jsonify(response)
