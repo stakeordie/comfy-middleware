@@ -110,7 +110,7 @@ app = Flask(__name__)
 
 @app.route('/runsync', methods=['POST'])
 def handle_post():
-    data = request.get_json()
+    data = request.get_json()['input']
 
     input_images = data['images']
 
