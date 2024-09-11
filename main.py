@@ -114,7 +114,7 @@ def handle_post():
 
     input_images = data['images']
 
-    upload_result = upload_images(images)
+    upload_result = upload_images(input_images)
 
     if upload_result["status"] == "error":
         return upload_result
