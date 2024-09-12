@@ -10,6 +10,7 @@ from flask import Flask, request, jsonify
 import base64
 from PIL import Image
 import io
+import requests
 
 server_address = "0.0.0.0:8188"
 client_id = str(uuid.uuid4())
