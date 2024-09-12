@@ -80,7 +80,7 @@ def upload_images(images):
 
         # Prepare the form data
         files = {
-            "image": (name, BytesIO(blob), "image/png"),
+            "image": (name, io.BytesIO(blob), "image/png"),
             "overwrite": (None, "true"),
         }
 
