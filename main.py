@@ -111,6 +111,10 @@ def upload_images(images):
 
 app = Flask(__name__)
 
+@app.route('/ping')
+def ping():
+    return "pong"
+
 @app.route('/runsync', methods=['POST'])
 def handle_post():
     data = request.get_json()['input']
