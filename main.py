@@ -14,7 +14,7 @@ import requests
 
 server_address = "0.0.0.0:8188"
 
-def queue_prompt(prompt):
+def queue_prompt(prompt, client_id):
     p = {"prompt": prompt, "client_id": client_id}
     data = json.dumps(p).encode('utf-8')
     req =  urllib.request.Request("http://{}/prompt".format(server_address), data=data)
@@ -30,8 +30,8 @@ def get_history(prompt_id):
     with urllib.request.urlopen("http://{}/history/{}".format(server_address, prompt_id)) as response:
         return json.loads(response.read())
 
-def get_images(ws, prompt):
-    prompt_id = queue_prompt(prompt)['prompt_id']
+def get_images(ws, prompt, client_id):
+    prompt_id = queue_prompt(prompt, client_id)['prompt_id']
     output_images = {}
     while True:
         out = ws.recv()
@@ -129,7 +129,7 @@ def handle_post():
 
     ws = websocket.WebSocket()
     ws.connect("ws://{}/ws?clientId={}".format(server_address, client_id))
-    images = get_images(ws, data['workflow'])
+    images = get_images(ws, data['workflow'], client_id)
 
     image_base64 = None
     for node_id in images:
