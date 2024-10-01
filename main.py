@@ -13,7 +13,6 @@ import io
 import requests
 
 server_address = "0.0.0.0:8188"
-client_id = str(uuid.uuid4())
 
 def queue_prompt(prompt):
     p = {"prompt": prompt, "client_id": client_id}
@@ -117,6 +116,8 @@ def ping():
 
 @app.route('/runsync', methods=['POST'])
 def handle_post():
+    client_id = str(uuid.uuid4())
+
     data = request.get_json()['input']
 
     input_images = data['images']
