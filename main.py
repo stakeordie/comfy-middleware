@@ -14,11 +14,13 @@ import requests
 
 server_address = "0.0.0.0:8188"
 
+
 def queue_prompt(prompt, client_id):
     p = {"prompt": prompt, "client_id": client_id}
     data = json.dumps(p).encode('utf-8')
     req =  urllib.request.Request("http://{}/prompt".format(server_address), data=data)
     return json.loads(urllib.request.urlopen(req).read())
+
 
 def get_image(filename, subfolder, folder_type):
     data = {"filename": filename, "subfolder": subfolder, "type": folder_type}
@@ -26,9 +28,11 @@ def get_image(filename, subfolder, folder_type):
     with urllib.request.urlopen("http://{}/view?{}".format(server_address, url_values)) as response:
         return response.read()
 
+
 def get_history(prompt_id):
     with urllib.request.urlopen("http://{}/history/{}".format(server_address, prompt_id)) as response:
         return json.loads(response.read())
+
 
 def get_images(ws, prompt, client_id):
     prompt_id = queue_prompt(prompt, client_id)['prompt_id']
@@ -40,9 +44,9 @@ def get_images(ws, prompt, client_id):
             if message['type'] == 'executing':
                 data = message['data']
                 if data['node'] is None and data['prompt_id'] == prompt_id:
-                    break #Execution is done
+                    break  #Execution is done
         else:
-            continue #previews are binary data
+            continue  #previews are binary data
 
     history = get_history(prompt_id)[prompt_id]
     for node_id in history['outputs']:
@@ -59,6 +63,7 @@ def get_images(ws, prompt, client_id):
         output_images[node_id] = images_output
 
     return output_images
+
 
 def upload_images(images):
     """
@@ -114,9 +119,11 @@ def upload_images(images):
 
 app = Flask(__name__)
 
+
 @app.route('/ping')
 def ping():
     return "pong"
+
 
 @app.route('/runsync', methods=['POST'])
 def handle_post():
@@ -138,10 +145,8 @@ def handle_post():
     image_base64 = None
     for node_id in images:
         for image_data in images[node_id]:
-            image = Image.open(io.BytesIO(image_data))
-            buffered = io.BytesIO()
-            image.save(buffered)
-            image_bytes = buffered.getvalue()
+            image = io.BytesIO(image_data)
+            image_bytes = image.getvalue()
             image_base64 = base64.b64encode(image_bytes).decode('utf-8')
 
     response = {
@@ -150,8 +155,8 @@ def handle_post():
             'message': image_base64
         }
     }
-    
     return jsonify(response)
+
 
 if __name__ == '__main__':
     # Run the Flask development server
