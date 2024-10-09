@@ -52,6 +52,10 @@ def get_images(ws, prompt, client_id):
             for image in node_output['images']:
                 image_data = get_image(image['filename'], image['subfolder'], image['type'])
                 images_output.append(image_data)
+        if 'gifs' in node_output:
+            for image in node_output['gifs']:
+                image_data = get_image(image['filename'], image['subfolder'], image['type'])
+                images_output.append(image_data)
         output_images[node_id] = images_output
 
     return output_images
@@ -136,7 +140,7 @@ def handle_post():
         for image_data in images[node_id]:
             image = Image.open(io.BytesIO(image_data))
             buffered = io.BytesIO()
-            image.save(buffered, format="PNG")
+            image.save(buffered)
             image_bytes = buffered.getvalue()
             image_base64 = base64.b64encode(image_bytes).decode('utf-8')
 
