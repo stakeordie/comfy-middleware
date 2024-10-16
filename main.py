@@ -11,6 +11,7 @@ import base64
 from PIL import Image
 import io
 import requests
+import argparse
 
 server_address = "0.0.0.0:8188"
 
@@ -158,6 +159,12 @@ def handle_post():
     return jsonify(response)
 
 
+parser = argparse.ArgumentParser(description="ComfyUI Middleware")
+
+parser.add_argument("--port", type=int, default=3000, help="Port to run the Flask server on")
+
+args = parser.parse_args()
+
 if __name__ == '__main__':
     # Run the Flask development server
-    app.run(debug=True, port=3000, host="0.0.0.0")
+    app.run(debug=True, port=args.port, host="0.0.0.0")
