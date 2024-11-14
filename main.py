@@ -51,7 +51,7 @@ def get_images(ws, prompt, client_id, output_node_id):
 
     history = get_history(prompt_id)[prompt_id]
     for node_id in history['outputs']:
-        if node_id != output_node_id:
+        if output_node_id is not None and node_id != output_node_id:
             continue
         node_output = history['outputs'][node_id]
         images_output = []
@@ -136,8 +136,8 @@ def handle_post():
 
     input_images = data['images']
 
-    if input_images is None or data['workflow'] is None or data['output_node_id'] is None:
-        return jsonify({'status': 'error', 'message': 'Invalid input'})
+    if input_images is None or data['workflow'] is None:
+        return jsonify({'status': 'error', 'message': 'Invalid input: Missing images or workflow'})
 
     upload_result = upload_images(input_images)
 
