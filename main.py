@@ -35,7 +35,7 @@ def get_history(prompt_id):
         return json.loads(response.read())
 
 
-def get_images(ws, prompt, client_id):
+def get_images(ws, prompt, client_id, output_node_id):
     prompt_id = queue_prompt(prompt, client_id)['prompt_id']
     output_images = {}
     while True:
@@ -51,6 +51,8 @@ def get_images(ws, prompt, client_id):
 
     history = get_history(prompt_id)[prompt_id]
     for node_id in history['outputs']:
+        if node_id != output_node_id:
+            continue
         node_output = history['outputs'][node_id]
         images_output = []
         if 'images' in node_output:
@@ -134,6 +136,9 @@ def handle_post():
 
     input_images = data['images']
 
+    if input_images is None or data['workflow'] is None or data['output_node_id'] is None:
+        return jsonify({'status': 'error', 'message': 'Invalid input'})
+
     upload_result = upload_images(input_images)
 
     if upload_result["status"] == "error":
@@ -141,7 +146,7 @@ def handle_post():
 
     ws = websocket.WebSocket()
     ws.connect("ws://{}/ws?clientId={}".format(server_address, client_id))
-    images = get_images(ws, data['workflow'], client_id)
+    images = get_images(ws, data['workflow'], client_id, data['output_node_id'])
 
     image_base64 = None
     for node_id in images:
