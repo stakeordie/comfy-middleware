@@ -53,10 +53,10 @@ def get_images(ws, prompt, client_id, output_node_id):
 
     history = get_history(prompt_id)[prompt_id]
     for node_id in history['outputs']:
-        if output_node_id is not None and node_id != output_node_id:
-            continue
         node_output = history['outputs'][node_id]
         print(f"runpod-worker-comfy - node {node_id} output: {node_output}")
+        if output_node_id is not None and node_id != output_node_id:
+            continue
         images_output = []
         if 'images' in node_output:
             for image in node_output['images']:
@@ -135,7 +135,7 @@ def ping():
 def handle_post():
     client_id = str(uuid.uuid4())
 
-    print(f"runpod-worker-comfy - generation id: {client_id}")
+    print(f"runpod-worker-comfy - Generation ID: {client_id}")
 
     data = request.get_json()['input']
 
