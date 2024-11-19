@@ -8,10 +8,12 @@ import urllib.request
 import urllib.parse
 from flask import Flask, request, jsonify
 import base64
-from PIL import Image
 import io
 import requests
 import argparse
+import sys
+
+sys.stdout.reconfigure(line_buffering=True)
 
 server_address = "0.0.0.0:8188"
 
