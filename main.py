@@ -42,6 +42,7 @@ def get_images(ws, prompt, client_id, output_node_id):
     output_images = {}
     while True:
         out = ws.recv()
+        print(f"runpod-worker-comfy - websocket message: {out}")
         if isinstance(out, str):
             message = json.loads(out)
             if message['type'] == 'executing':
