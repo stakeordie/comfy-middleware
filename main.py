@@ -54,6 +54,7 @@ def get_images(ws, prompt, client_id, output_node_id):
         if output_node_id is not None and node_id != output_node_id:
             continue
         node_output = history['outputs'][node_id]
+        print(node_output)
         images_output = []
         if 'images' in node_output:
             for image in node_output['images']:
