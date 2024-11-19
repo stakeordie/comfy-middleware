@@ -54,7 +54,7 @@ def get_images(ws, prompt, client_id, output_node_id):
         if output_node_id is not None and node_id != output_node_id:
             continue
         node_output = history['outputs'][node_id]
-        print(node_output)
+        print(f"runpod-worker-comfy - node {node_id} output: {node_output}")
         images_output = []
         if 'images' in node_output:
             for image in node_output['images']:
@@ -132,6 +132,8 @@ def ping():
 @app.route('/runsync', methods=['POST'])
 def handle_post():
     client_id = str(uuid.uuid4())
+
+    print(f"runpod-worker-comfy - generation id: {client_id}")
 
     data = request.get_json()['input']
 
